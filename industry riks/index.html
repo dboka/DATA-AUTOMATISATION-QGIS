@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rīks industriālajai attīstībai piemērotāko teritoriju noteikšanai</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <!-- Logotipi -->
+  <div class="logos">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/LVGMC_logo.png" alt="LVĢMC">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Coat_of_arms_of_Latvia.svg" alt="Latvijas Republika">
+  </div>
+
+  <!-- Virsraksts -->
+  <div class="title">Rīks industriālajai attīstībai piemērotāko teritoriju noteikšanai</div>
+
+  <!-- Sānu izvēlne -->
+  <div class="sidebar">
+    <h3>Energoresursi</h3>
+    <button class="btn" id="biomasaBtn">BIOMASA</button>
+    <button class="btn" id="biogazeBtn">BIOGĀZE</button>
+    <button class="btn" id="vejs1Btn">VĒJŠ (līdz 2028.g.)</button>
+    <button class="btn" id="vejs2Btn">VĒJŠ (no 2028.g.)</button>
+    <button class="btn" id="sauleBtn">SAULE</button>
+  </div>
+
+  <script src="script.js?v=2"></script>
+</body>
+
+</html>

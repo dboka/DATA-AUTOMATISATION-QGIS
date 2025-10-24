@@ -1,0 +1,83 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.sidebar, .title, .logos {
+  position: absolute;
+  z-index: 1000;
+}
+
+/* Sānu izvēlne */
+.sidebar {
+  top: 60px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  width: 200px;
+  font-family: sans-serif;
+}
+
+.sidebar h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  margin: 6px 0;
+  padding: 10px;
+  background-color: #e8e8e8;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background-color: #ccc;
+}
+
+.btn.active {
+  background-color: #2a93d5;
+  color: white;
+}
+
+/* Logo */
+.logos {
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.logos img {
+  height: 40px;
+}
+
+.title {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.85);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-family: sans-serif;
+}
