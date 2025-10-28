@@ -1,0 +1,76 @@
+MAP
+  NAME "solar_overlay"
+  STATUS ON
+  EXTENT 20 55 28 58
+  UNITS DD
+  SHAPEPATH "../data"
+  SIZE 256 256
+  IMAGECOLOR 255 255 255
+  IMAGETYPE PNG
+  PROJECTION
+    "init=epsg:4326"
+  END
+
+  WEB
+    METADATA
+      "wms_title"           "Solar Overlay Risk Map"
+      "wms_enable_request"  "*"
+      "wms_srs"             "EPSG:4326"
+    END
+  END
+
+  LAYER
+    NAME "solar"
+    TYPE POLYGON
+    STATUS ON
+    CONNECTIONTYPE OGR
+    DATA "solar_overlay_RISKSTEP.gpkg"
+
+    PROJECTION
+      "init=epsg:4326"
+    END
+
+    CLASSITEM "final_color"
+
+    CLASS
+      NAME "Sarkans"
+      EXPRESSION "sarkans"
+      STYLE
+        COLOR 255 0 0
+        OUTLINECOLOR 0 0 0
+      END
+    END
+
+    CLASS
+      NAME "Oranžs"
+      EXPRESSION "oranzs"
+      STYLE
+        COLOR 255 165 0
+        OUTLINECOLOR 0 0 0
+      END
+    END
+
+    CLASS
+      NAME "Dzeltens"
+      EXPRESSION "dzeltens"
+      STYLE
+        COLOR 255 255 0
+        OUTLINECOLOR 0 0 0
+      END
+    END
+
+    CLASS
+      NAME "Zaļš"
+      EXPRESSION "zals"
+      STYLE
+        COLOR 0 200 0
+        OUTLINECOLOR 0 0 0
+      END
+    END
+
+    METADATA
+      "wms_title" "Solar Overlay"
+      "gml_include_items" "all"
+    END
+  END
+END

@@ -1,33 +1,48 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   // ================================
-  // 🌍 KARTES INICIALIZĀCIJA
+  // 🌍 MAP INITIALIZATION
   // ================================
   const map = L.map('map').setView([56.95, 24.1], 7);
 
-  // OSM pamatslānis
+  // OSM base layer
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
   // ================================
-  // 🧱 SLĀŅU KONTEINERS
+  // 🧱 LAYER CONTAINER
   // ================================
-  const layers = {}; // ← šis tagad noteikti eksistē
+  const layers = {};
 
   // ================================
-  // 🌞 SAULES FLĪZES
+  // 🌞 LOAD GEOTIFF (SAULE)
   // ================================
-  layers.saule = L.tileLayer('SauleTiles/{z}/{x}/{y}.png', {
-    minZoom: 5,
-    maxZoom: 12,
-    opacity: 0.8,
-    tms: true // ja karte izskatās "apgriezta", maini uz false
-  });
+  // 👇 IMPORTANT: include folder name since Live Server runs from parent directory
+  fetch("industry riks/Saule_raster_overlay_colored.tif")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("File not found at: " + response.url);
+      }
+      return response.arrayBuffer();
+    })
+    .then(arrayBuffer => {
+      parseGeoraster(arrayBuffer).then(georaster => {
+        const sauleLayer = new GeoRasterLayer({
+          georaster: georaster,
+          opacity: 0.8,
+          resolution: 256
+        });
+
+        layers.saule = sauleLayer;
+        console.log("✅ Saule GeoTIFF fully loaded and ready!");
+      });
+    })
+    .catch(err => console.error("❌ Error loading Saule GeoTIFF:", err));
 
   // ================================
-  // 🧩 POGU FUNKCIONALITĀTE
+  // 🧩 BUTTON FUNCTIONALITY
   // ================================
   const buttons = {
     biomasaBtn: "biomasa",
@@ -43,21 +58,4 @@ document.addEventListener("DOMContentLoaded", () => {
     const key = buttons[btnId];
 
     btn.addEventListener("click", () => {
-      const layer = layers[key];
-
-      if (!layer) {
-        alert("Šis slānis vēl nav ielādēts vai pieejams tikai Saule testam.");
-        return;
-      }
-
-      if (map.hasLayer(layer)) {
-        map.removeLayer(layer);
-        btn.classList.remove("active");
-      } else {
-        layer.addTo(map);
-        btn.classList.add("active");
-      }
-    });
-  }
-
-});
+      const
