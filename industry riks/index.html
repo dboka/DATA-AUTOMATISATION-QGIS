@@ -1,45 +1,44 @@
 <!DOCTYPE html>
 <html lang="lv">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rīks — Industriālajai attīstībai piemērotākās teritorijas</title>
-  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-  <!-- Leaflet bibliotēka -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🗺️ DAP / VVD / VMD slāņu karte</title>
+
+  <!-- Leaflet un bibliotēkas -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- VectorGrid + Pako (gzip atspiešanai) -->
+  <!-- ✅ Šī ir nepieciešamā bibliotēka! -->
   <script src="https://unpkg.com/leaflet.vectorgrid/dist/Leaflet.VectorGrid.bundled.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
 
-  <style>
-    html, body, #map {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    .title {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.9);
-      padding: 8px 18px;
-      border-radius: 10px;
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      z-index: 1000;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div id="map"></div>
-  <div class="title">🗺️ DAP / VVD / VMD slāņi — aizpildīti poligoni</div>
 
+  <!-- KARTES KONTEINERS -->
+  <div id="map"></div>
+
+  <!-- VIRSRKSTS -->
+  <div class="title">🗺️ Saules karte</div>
+
+ <!-- SĀNU PANELIS -->
+<div class="sidebar">
+  <h3>🗂️ Slāņu kontrole</h3>
+  <div id="layerControls" class="layer-list">
+    <p>Notiek slāņu ielāde...</p>
+  </div>
+  <div class="layer-buttons">
+    <button class="btn" id="toggleAll">✅ Ieslēgt visus</button>
+    <button class="btn" id="clearAll">❌ Izslēgt visus</button>
+  </div>
+</div>
+
+
+  <!-- JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
