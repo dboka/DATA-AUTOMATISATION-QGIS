@@ -10,20 +10,51 @@ if (!L.DomEvent.fakeStop) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  //  Kartes inicializācija
+  // ===============================
+  //  KARTES INICIALIZĀCIJA
+  // ===============================
   const map = L.map("map").setView([56.95, 24.1], 7);
 
+  // ===== Pane definīcijas =====
+  map.createPane("background");
+  map.getPane("background").style.zIndex = 300; // zem visiem pārējiem
+
+  map.createPane("bottom");  map.getPane("bottom").style.zIndex = 400;
+  map.createPane("middle");  map.getPane("middle").style.zIndex = 450;
+  map.createPane("top");     map.getPane("top").style.zIndex = 500;
+
+  // ===== OpenStreetMap pamatkarte =====
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap contributors"
   }).addTo(map);
 
   // ===============================
-  //  Pane kārtas 
+  //  🇱🇻 Latvijas robežas fona slānis (zaļš, caurspīdīgs)
   // ===============================
-  map.createPane("bottom"); map.getPane("bottom").style.zIndex = 400;
-  map.createPane("middle"); map.getPane("middle").style.zIndex = 450;
-  map.createPane("top"); map.getPane("top").style.zIndex = 500;
+  async function addLatviaBackground() {
+    try {
+      const res = await fetch("geojson/robeza.geojson");
+      if (!res.ok) throw new Error("Nevar ielādēt robežas failu.");
+      const geojson = await res.json();
+
+      const latviaLayer = L.geoJSON(geojson, {
+        pane: "background",
+        style: {
+          fillColor: "#66bb6a",   // patīkams zaļš tonis
+          fillOpacity: 0.35,      // caurspīdīgs, lai redz ielas
+          color: "#2e7d32",       // tumšāka robeža
+          weight: 1.2,
+          opacity: 0.7
+        }
+      }).addTo(map);
+
+      console.log("✅ Latvijas robežas fona slānis ielādēts.");
+    } catch (err) {
+      console.error("❌ Kļūda ielādējot robežas slāni:", err);
+    }
+  }
+  addLatviaBackground();
 
   // ===============================
   //  Slāņu definīcija
