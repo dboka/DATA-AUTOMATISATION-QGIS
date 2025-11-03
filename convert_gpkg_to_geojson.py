@@ -3,7 +3,7 @@ import os
 import time
 
 # ====== IESTATĪJUMI ======
-input_folder = r"C:\Users\deniss.boka\Desktop\Boka_datuparbaude\GEOPACKAGE"
+input_folder = r"C:\Users\deniss.boka\Desktop\Boka_datuparbaude\OVERLAY\Vejs slani GEOJSON"
 output_folder = os.path.join(input_folder, "GEOJSON_READY")
 
 os.makedirs(output_folder, exist_ok=True)
