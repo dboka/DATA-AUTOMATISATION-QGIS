@@ -1,103 +1,225 @@
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #f2f2f2;
 }
 
+/* ===== Karte ===== */
 #map {
   height: 100%;
   width: 100%;
+  z-index: 1;
+}
+
+/* ===== Galvene ===== */
+.title-bar {
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-
-.sidebar, .title, .logos {
-  position: absolute;
-  z-index: 1000;
-}
-
-/* ===========================
-   🧭 Sānu izvēlne
-=========================== */
-.sidebar {
-  top: 60px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  width: 220px;
-  font-family: sans-serif;
-}
-
-.sidebar h3 {
-  font-size: 16px;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-.btn {
-  display: block;
-  width: 100%;
-  margin: 6px 0;
-  padding: 10px;
-  background-color: #e8e8e8;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.btn:hover {
-  background-color: #ccc;
-}
-
-.btn.active {
-  background-color: #2a93d5;
-  color: white;
-}
-
-/* ===========================
-   🖼️ Logotipi
-=========================== */
-.logos {
-  top: 10px;
-  left: 10px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.logos img {
-  height: 40px;
-}
-
-/* ===========================
-   🏷️ Virsraksts
-=========================== */
-.title {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255,255,255,0.85);
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-family: sans-serif;
-  font-size: 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 28px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  text-align: center;
+  z-index: 999;
+  backdrop-filter: blur(6px);
 }
+
+.title-bar h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2b3d24;
+}
+
+.subtitle {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* ===== Paneļu kopīgais stils ===== */
+.panel {
+  background: rgba(255,255,255,0.96);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  padding: 18px;
+  backdrop-filter: blur(6px);
+}
+
+/* ===== Sānu panelis ===== */
+.sidebar {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  width: 260px;
+  z-index: 999;
+  overflow-y: auto;
+  max-height: calc(100% - 120px);
+}
+
+.sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #2e7d32;
+}
+
+.layer-list {
+  margin-bottom: 12px;
+}
+
 .layer-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-  font-size: 14px;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: #333;
 }
 
-.layer-item label {
+.layer-item input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+/* Pogas */
+.layer-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn {
+  flex: 1;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.btn.primary {
+  background-color: #43a047;
+  color: white;
+}
+
+.btn.primary:hover {
+  background-color: #388e3c;
+}
+
+.btn.danger {
+  background-color: #e53935;
+  color: white;
+}
+
+.btn.danger:hover {
+  background-color: #c62828;
+}
+
+/* Scrollbar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(46, 125, 50, 0.5);
+  border-radius: 3px;
+}
+
+/* ===== Logotipu josla ===== */
+.brand-overlay {
+  position: absolute;
+  bottom: 12px;
+  left: 15px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 6px 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.brand-overlay .logos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-overlay img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-overlay span {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1b1b1b;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+/* ===== Enerģijas izvēlne (BIOMASA / SAULE / utt.) ===== */
+.energy-switch {
+  position: absolute;
+  bottom: 90px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 220px;
+}
+
+.energy-switch label {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2b3d24;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  backdrop-filter: blur(6px);
+}
+
+.energy-switch label:hover {
+  background: rgba(235, 244, 237, 0.96);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.energy-switch input[type="radio"] {
+  transform: scale(1.2);
+}
+
+/* Aktīvais */
+.energy-switch input[type="radio"]:checked + span {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+/* Responsīvs */
+@media (max-width: 700px) {
+  .sidebar {
+    width: 85%;
+    right: 7%;
+  }
+  .energy-switch {
+    bottom: 100px;
+    right: 15px;
+    width: auto;
+  }
 }

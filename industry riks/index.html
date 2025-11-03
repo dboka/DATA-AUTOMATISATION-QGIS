@@ -5,40 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🗺️ DAP / VVD / VMD slāņu karte</title>
 
-  <!-- Leaflet un bibliotēkas -->
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- ✅ Šī ir nepieciešamā bibliotēka! -->
+  <!-- Bibliotēkas -->
   <script src="https://unpkg.com/leaflet.vectorgrid/dist/Leaflet.VectorGrid.bundled.js"></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
 
+  <!-- Stils -->
   <link rel="stylesheet" href="style.css">
 </head>
+<!-- ✅ Logotipu josla ar diviem attēliem -->
+<div class="brand-overlay">
+  <div class="logos">
+    <img src="images/LVGMC_1300-AM.png" alt="LVGMC">
+    <img src="images/logo.png" alt="Klimata un enerģētikas ministrija">
+  </div>
+ 
+</div>
+<!-- 🌞 Resursu izvēlne -->
+<div class="energy-switch">
+  <label><input type="radio" name="energy" value="biomasa"> BIOMASA</label>
+  <label><input type="radio" name="energy" value="biogaze"> BIOGĀZE</label>
+  <label><input type="radio" name="energy" value="vejs2028"> VĒJŠ (līdz 2028.g.)</label>
+  <label><input type="radio" name="energy" value="vejsno2028"> VĒJŠ (no 2028.g.)</label>
+  <label><input type="radio" name="energy" value="saule" checked> SAULE</label>
+</div>
 <body>
-
-  <!-- KARTES KONTEINERS -->
+  <!-- Karte -->
   <div id="map"></div>
 
-  <!-- VIRSRKSTS -->
-  <div class="title">🗺️ Saules karte</div>
-
- <!-- SĀNU PANELIS -->
-<div class="sidebar">
-  <h3>🗂️ Slāņu kontrole</h3>
-  <div id="layerControls" class="layer-list">
-    <p>Notiek slāņu ielāde...</p>
+  <!-- Galvenes nosaukums -->
+  <div class="title-bar">
+    <h2>Rīks industriālajai attīstībai piemērotāko teritoriju noteikšanai</h2>
+    <span class="subtitle">prototips</span>
   </div>
-  <div class="layer-buttons">
-    <button class="btn" id="toggleAll">✅ Ieslēgt visus</button>
-    <button class="btn" id="clearAll">❌ Izslēgt visus</button>
+
+  <!-- Sānu panelis -->
+  <div class="sidebar">
+    <h3> Slāņu kontrole</h3>
+    <div id="layerControls" class="layer-list">
+      <p>Notiek slāņu ielāde...</p>
+    </div>
+
+    <div class="layer-buttons">
+      <button class="btn primary" id="toggleAll"> Ieslēgt visus</button>
+      <button class="btn danger" id="clearAll"> Izslēgt visus</button>
+    </div>
   </div>
-</div>
 
-
-  <!-- JavaScript -->
+  <!-- JS -->
   <script src="script.js"></script>
 </body>
 </html>

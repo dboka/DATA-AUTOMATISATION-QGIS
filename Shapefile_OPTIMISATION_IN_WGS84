@@ -1,0 +1,104 @@
+import os
+import geopandas as gpd
+from shapely.ops import unary_union
+from shapely.geometry import Polygon, MultiPolygon
+import time
+
+# ====== CEĻI ======
+input_path = r"C:\Users\deniss.boka\Desktop\Boka_datuparbaude\Gatavie Shapefaili LKS 92\18. DAP Sugu noverojumi\DAP sugu noverojumi.shp"
+output_folder = os.path.join(os.path.dirname(input_path), "Optimized_Dissolved")
+os.makedirs(output_folder, exist_ok=True)
+
+# ====== IESTATĪJUMI ======
+simplify_tolerance = 5.0   # lielāka vērtība = mazāks fails, bet mazāk detalizēts
+default_crs = "EPSG:3059"  # LKS-92 Latvijai
+target_crs = "EPSG:4326"   # Web koordinātas (WGS84)
+
+# ====== FUNKCIJA ======
+def safe_read_file(path):
+    """Droši ielasa shapefailu un pārliecinās, ka tas ir GeoDataFrame."""
+    try:
+        gdf = gpd.read_file(path)
+    except Exception as e:
+        raise RuntimeError(f"Nevar nolasīt shapefailu: {e}")
+
+    # Ja atgriežas DataFrame — meklē ģeometrijas kolonnu
+    if not isinstance(gdf, gpd.GeoDataFrame):
+        from shapely import wkt
+        geom_col = None
+        for col in gdf.columns:
+            if gdf[col].astype(str).str.startswith(("POLY", "MULTI")).any():
+                geom_col = col
+                break
+        if geom_col:
+            gdf[geom_col] = gdf[geom_col].apply(wkt.loads)
+            gdf = gpd.GeoDataFrame(gdf, geometry=geom_col)
+        else:
+            raise ValueError("Nav atrasta ģeometrijas kolonna (geometry, Shape vai POLYGON dati).")
+
+    return gdf
+
+
+def optimize_and_dissolve(input_path):
+    start = time.time()
+    filename = os.path.basename(input_path)
+    print(f"➡️ Apstrāde sākta: {filename}")
+
+    # 1️⃣ Ielasa shapefailu drošā veidā
+    gdf = safe_read_file(input_path)
+
+    # 2️⃣ Pārbauda CRS
+    if gdf.crs is None:
+        print(f"⚠️ CRS nav norādīts — piešķir {default_crs}")
+        gdf.set_crs(default_crs, inplace=True)
+
+    # 3️⃣ Izmet nederīgās rindas
+    gdf = gdf[gdf.geometry.notnull() & gdf.is_valid].copy()
+    if gdf.empty:
+        raise ValueError("Shapefails nesatur derīgas ģeometrijas!")
+
+    # 4️⃣ Noņem liekās kolonnas (fid, id, shape_area utt.)
+    drop_cols = [c for c in gdf.columns if c.lower() in ["fid", "id", "objectid", "shape_area", "shape_leng"]]
+    gdf.drop(columns=drop_cols, inplace=True, errors="ignore")
+
+    # 5️⃣ Noņem konstantes kolonnas
+    gdf = gdf.loc[:, gdf.nunique() > 1]
+
+    # 6️⃣ Pārprojektē uz WGS84
+    gdf = gdf.to_crs(target_crs)
+
+    # 7️⃣ Vienkāršo (pirms apvienošanas)
+    gdf["geometry"] = gdf["geometry"].simplify(simplify_tolerance, preserve_topology=True)
+
+    # 8️⃣ Apvieno (dissolve visus)
+    print("🧩 Apvieno ģeometrijas (var aizņemt līdz 1 min)...")
+    merged_geom = unary_union(gdf.geometry)
+
+    if isinstance(merged_geom, Polygon):
+        merged_geom = MultiPolygon([merged_geom])
+
+    # 9️⃣ Jaunais GeoDataFrame
+    result = gpd.GeoDataFrame(geometry=[merged_geom], crs=target_crs)
+
+    # 🔟 Pēdējā vienkāršošana – vēl samazina izmēru
+    result["geometry"] = result["geometry"].simplify(simplify_tolerance * 1.5, preserve_topology=True)
+
+    # 🔸 Saglabā rezultātu
+    out_name = os.path.splitext(filename)[0] + "_merged_light.gpkg"
+    out_path = os.path.join(output_folder, out_name)
+    result.to_file(out_path, driver="GPKG")
+
+    # 📊 Informācija
+    elapsed = round(time.time() - start, 2)
+    orig_size = os.path.getsize(input_path) / (1024 * 1024)
+    new_size = os.path.getsize(out_path) / (1024 * 1024)
+    reduction = (1 - new_size / orig_size) * 100
+    print(f"✅ Saglabāts: {out_name} ({elapsed} s)")
+    print(f"📉 Izmērs: {orig_size:.1f} MB → {new_size:.1f} MB ({reduction:.1f}% mazāks)\n")
+
+
+# ====== IZPILDE ======
+try:
+    optimize_and_dissolve(input_path)
+except Exception as e:
+    print(f"❌ Kļūda: {e}")
